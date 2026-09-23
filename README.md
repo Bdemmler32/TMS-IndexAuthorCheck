@@ -1,4 +1,4 @@
-# TMS Index Author Check v0.01
+# TMS Index Author Check v0.02
 
 Checks the author index tags in an Adobe InDesign tagged-text export before the index is built. Everything runs in the browser, and files are never uploaded.
 
@@ -14,9 +14,9 @@ Checks the author index tags in an Adobe InDesign tagged-text export before the 
 
 ## Using it
 
-1. **Choose file:** the `.txt` from *File › Export › Adobe InDesign Tagged Text*.
+1. **Choose file:** the tagged-text `output.txt` exported from InDesign (*File › Export › Adobe InDesign Tagged Text*).
 2. **Choose checks:** switch checks on or off, then click **Run checks**.
-3. **Results:** the checks list folds away and the Results links jump to each section. Export as a text log or CSV.
+3. **Results:** steps 1 and 2 fold into one-line summaries (click to reopen) and the Results links jump to each section. Export as a text log or CSV.
 
 ## Hosting on GitHub Pages
 
@@ -28,7 +28,7 @@ The service worker loads HTML, CSS and JS from the network first, so users get n
 
 For each release, change the version number in these places:
 
-- `sw.js`: `const VERSION = "0.01";`
-- `index.html`: `?v=0.01` on `styles.css` and `app.js`, and the `app-version` meta tag
-- `app.js`: `var APP_VERSION = "0.01";`
-- the `v0.01` label in the top bar in `index.html`
+- `sw.js`: `const VERSION = "0.02";`
+- `index.html`: `?v=0.02` on `styles.css` and `app.js`, and the `app-version` meta tag
+- `app.js`: `var APP_VERSION = "0.02";`
+- the `v0.02` label in the top bar in `index.html`

@@ -1,5 +1,5 @@
-/* TMS Index Author Check v0.01 */
-var APP_VERSION = "0.01";
+/* TMS Index Author Check v0.02 */
+var APP_VERSION = "0.02";
 // CORE-START
 var IC = (function () {
   var PARTICLES = /^(van|von|der|den|de|del|della|di|da|dos|das|du|la|le|ter|ten|zu|af|al|el|bin|ibn|st)$/;
@@ -364,15 +364,30 @@ var IC = (function () {
     $("nav").classList.toggle("stale", isDirty());
     $("step3").hidden = false;
   }
-  function setCollapsed(c) {
-    state.collapsed = c;
-    $("step2Body").hidden = c;
-    $("step2").classList.toggle("is-collapsed", c);
-    $("step2Toggle").setAttribute("aria-expanded", String(!c));
-    var n = onCount(), total = allChecks().length;
-    $("step2Summary").textContent = c ? (n === total ? "All " + total + " on" : n + " of " + total + " on") + (isDirty() ? " · changed" : "") : "";
+  // Each sidebar step folds to a one-line summary
+  state.col = { 1: false, 2: false, 3: false };
+  function stepSummary(n) {
+    if (n === 1) return state.fileName || "No file yet";
+    if (n === 2) { var k = onCount(), total = allChecks().length; return (k === total ? "All " + total + " on" : k + " of " + total + " on") + (isDirty() ? " · changed" : ""); }
+    if (n === 3 && state.res) { var r = JSON.parse(state.ran).on; return allChecks().filter(function (c) { return r[c.key]; }).length + " sections"; }
+    return "";
   }
-  $("step2Toggle").addEventListener("click", function () { setCollapsed(!state.collapsed); });
+  function setCollapsed(n, c) {
+    state.col[n] = c;
+    $("step" + n + "Body").hidden = c;
+    $("step" + n).classList.toggle("is-collapsed", c);
+    $("step" + n + "Toggle").setAttribute("aria-expanded", String(!c));
+    $("step" + n + "Summary").textContent = c ? stepSummary(n) : "";
+  }
+  function refreshSteps() {
+    [1, 2, 3].forEach(function (n) { if (state.col[n]) $("step" + n + "Summary").textContent = stepSummary(n); });
+    $("step1").classList.toggle("is-done", !!state.data);
+    $("step2").classList.toggle("is-done", !!state.res && !isDirty());
+    $("step3").classList.toggle("is-done", !!state.res && !isDirty());
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".step-toggle"), function (b) {
+    b.addEventListener("click", function () { var n = +b.getAttribute("data-step"); setCollapsed(n, !state.col[n]); });
+  });
   $("nav").addEventListener("click", function (e) {
     var b = e.target.closest("[data-go]"); if (b) goTo(b.getAttribute("data-go"));
   });
@@ -382,8 +397,8 @@ var IC = (function () {
     GROUPS.forEach(function (g) {
       h += '<div class="list-group"><span class="dot ' + g.dot + '"></span>' + esc(g.title) + "</div>";
       if (g.setting) {
-        var anyMarked = g.checks.some(function (c) { return c.mark && state.on[c.key]; });
-        h += '<div class="item setting' + (anyMarked ? "" : " is-off") + '"><label for="opt-' + g.setting.key + '">' + sw("opt-" + g.setting.key, state.opt[g.setting.key], !anyMarked, true) +
+        var setOn = state.opt[g.setting.key];
+        h += '<div class="item setting' + (setOn ? "" : " is-off") + '"><label for="opt-' + g.setting.key + '" title="Applies to the checks marked ◆">' + sw("opt-" + g.setting.key, setOn, false, true) +
           '<span class="item-title">' + esc(g.setting.title) + "</span></label></div>";
       }
       g.checks.forEach(function (c) {
@@ -406,7 +421,10 @@ var IC = (function () {
     renderList();
   });
   $("allChecks").addEventListener("change", function (e) {
-    allChecks().forEach(function (c) { state.on[c.key] = e.target.checked; });
+    var v = e.target.checked;
+    allChecks().forEach(function (c) { state.on[c.key] = v; });
+    state.opt.skipDiffFirst = v;                         // the group setting follows the master switch
+    if (!v) state.opt.shortNames = false;
     renderList();
   });
 
@@ -422,6 +440,7 @@ var IC = (function () {
       isDirty() ? "Settings changed. Run again to update the results." : state.res ? "Results are up to date." : "Ready to run.";
     $("stale").hidden = !isDirty();
     $("nav").classList.toggle("stale", isDirty());
+    refreshSteps();
   }
 
   // ---------- step 1: file
@@ -435,10 +454,9 @@ var IC = (function () {
     state.data = data; state.fileName = name; state.res = null; state.ran = null; state.active = null;
     $("dropTitle").textContent = name;
     $("dropSub").textContent = "Drop or choose another file to replace it";
-    $("step1").classList.add("is-done");
     setFileStatus('<span class="badge b-green">✓ ' + fmt(data.markers) + ' markers</span><span class="badge b-neutral">' + fmt(data.entries.length) + " tags</span>");
     $("resultsWrap").hidden = true; $("emptyState").hidden = false;
-    renderNav(); setCollapsed(false);
+    renderNav(); setCollapsed(1, false); setCollapsed(2, false);
     $("emptyTitle").textContent = "Ready to run";
     $("emptyText").textContent = "“" + name + "” is loaded. Pick your checks on the left, then click Run checks.";
     renderList();
@@ -473,7 +491,8 @@ var IC = (function () {
       renderResults(true);
       renderList();
       renderNav();
-      setCollapsed(true);
+      setCollapsed(1, true); setCollapsed(2, true); setCollapsed(3, false);
+      refreshSteps();
       $("panel").scrollTop = 0;
       if (window.matchMedia("(max-width: 860px)").matches) $("panel").scrollIntoView({ block: "start" });
     }, 30);

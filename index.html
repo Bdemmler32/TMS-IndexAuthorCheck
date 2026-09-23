@@ -4,34 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<meta name="app-version" content="0.01">
+<meta name="app-version" content="0.02">
 <title>TMS Index Author Check</title>
 <link rel="icon" type="image/png" href="tms-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=0.01">
+<link rel="stylesheet" href="styles.css?v=0.02">
 </head>
 <body>
 <header class="topbar">
-  <div class="brand"><img class="brand-logo" src="tms-logo.png" alt="TMS" width="60.3" height="22"><span class="brand-div"></span><span class="brand-text">Index Author <span>Check</span></span><span class="brand-ver">v0.01</span></div>
+  <div class="brand"><img class="brand-logo" src="tms-logo.png" alt="TMS" width="60.3" height="22"><span class="brand-div"></span><span class="brand-text">Index Author <span>Check</span></span><span class="brand-ver">v0.02</span></div>
   <div class="topbar-right"><button class="btn btn-sm btn-red" type="button" id="updateBtn" hidden>New version, reload</button><div class="topbar-note"><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1a4 4 0 0 0-4 4v2H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-1V5a4 4 0 0 0-4-4Zm-2.5 4a2.5 2.5 0 0 1 5 0v2h-5V5Z"/></svg><span>Runs in your browser. Files are never uploaded.</span></div></div>
 </header>
 
 <div class="app">
   <aside class="setup" aria-label="Setup">
-    <section id="step1">
-      <div class="step-head"><span class="step-num">1</span><h2 class="step-title">Choose file</h2></div>
+    <section id="step1" class="step">
+      <button type="button" class="step-head step-toggle" id="step1Toggle" data-step="1" aria-expanded="true" aria-controls="step1Body">
+        <span class="step-num">1</span><span class="step-title">Choose file</span>
+        <span class="step-summary" id="step1Summary"></span>
+        <svg class="chev" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="step1Body">
       <label class="drop" id="drop" for="file">
-        <span class="drop-text"><strong id="dropTitle">Drop a tagged-text file</strong><span id="dropSub">InDesign › Export › Tagged Text (.txt)</span></span>
+        <span class="drop-text"><strong id="dropTitle">Drop a tagged-text file</strong><span id="dropSub">output.txt</span></span>
         <span class="btn btn-primary btn-sm" aria-hidden="true">Choose…</span>
         <input type="file" id="file" accept=".txt,text/plain" hidden>
       </label>
       <div class="file-status" id="fileStatus"></div>
+      </div>
     </section>
 
-    <section id="step2">
-      <button type="button" class="step-head step-toggle" id="step2Toggle" aria-expanded="true" aria-controls="step2Body">
+    <section id="step2" class="step">
+      <button type="button" class="step-head step-toggle" id="step2Toggle" data-step="2" aria-expanded="true" aria-controls="step2Body">
         <span class="step-num">2</span><span class="step-title">Choose checks</span>
         <span class="step-summary" id="step2Summary"></span>
         <svg class="chev" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -46,15 +52,15 @@
       </div>
     </section>
 
-    <section id="step3" hidden>
-      <div class="step-head"><span class="step-num">3</span><h2 class="step-title">Results</h2></div>
-      <nav class="nav" id="nav" aria-label="Jump to a result section"></nav>
+    <section id="step3" class="step" hidden>
+      <button type="button" class="step-head step-toggle" id="step3Toggle" data-step="3" aria-expanded="true" aria-controls="step3Body">
+        <span class="step-num">3</span><span class="step-title">Results</span>
+        <span class="step-summary" id="step3Summary"></span>
+        <svg class="chev" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="step3Body"><nav class="nav" id="nav" aria-label="Jump to a result section"></nav></div>
     </section>
 
-    <div class="foot">
-      <p>Tags are split at the first comma, so <code>Rollett\, A</code> reads as “Rollett” and “A”. Escapes like <code>\,</code> count as the plain character.</p>
-      <p>◆ uses the “skip clearly different first names” setting.</p>
-    </div>
   </aside>
 
   <section class="panel" id="panel" aria-live="polite">
@@ -77,6 +83,6 @@
   </section>
 </div>
 
-<script src="app.js?v=0.01"></script>
+<script src="app.js?v=0.02"></script>
 </body>
 </html>
