@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="app-version" content="0.01">
+<title>TMS Index Author Check</title>
+<link rel="icon" type="image/png" href="tms-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css?v=0.01">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><img class="brand-logo" src="tms-logo.png" alt="TMS" width="60.3" height="22"><span class="brand-div"></span><span class="brand-text">Index Author <span>Check</span></span><span class="brand-ver">v0.01</span></div>
+  <div class="topbar-right"><button class="btn btn-sm btn-red" type="button" id="updateBtn" hidden>New version, reload</button><div class="topbar-note"><svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1a4 4 0 0 0-4 4v2H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-1V5a4 4 0 0 0-4-4Zm-2.5 4a2.5 2.5 0 0 1 5 0v2h-5V5Z"/></svg><span>Runs in your browser. Files are never uploaded.</span></div></div>
+</header>
+
+<div class="app">
+  <aside class="setup" aria-label="Setup">
+    <section id="step1">
+      <div class="step-head"><span class="step-num">1</span><h2 class="step-title">Choose file</h2></div>
+      <label class="drop" id="drop" for="file">
+        <span class="drop-text"><strong id="dropTitle">Drop a tagged-text file</strong><span id="dropSub">InDesign › Export › Tagged Text (.txt)</span></span>
+        <span class="btn btn-primary btn-sm" aria-hidden="true">Choose…</span>
+        <input type="file" id="file" accept=".txt,text/plain" hidden>
+      </label>
+      <div class="file-status" id="fileStatus"></div>
+    </section>
+
+    <section id="step2">
+      <button type="button" class="step-head step-toggle" id="step2Toggle" aria-expanded="true" aria-controls="step2Body">
+        <span class="step-num">2</span><span class="step-title">Choose checks</span>
+        <span class="step-summary" id="step2Summary"></span>
+        <svg class="chev" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="step2Body">
+      <div class="controls">
+        <label class="all-toggle" for="allChecks"><span class="switch" id="allSwitch"><input type="checkbox" role="switch" id="allChecks" checked><span class="switch-track"></span></span><span id="allLabel">All checks</span></label>
+        <button class="btn btn-red" type="button" id="run" disabled>Run checks</button>
+      </div>
+      <p class="run-hint" id="runHint">Choose a file first.</p>
+      <div class="list" id="list"></div>
+      </div>
+    </section>
+
+    <section id="step3" hidden>
+      <div class="step-head"><span class="step-num">3</span><h2 class="step-title">Results</h2></div>
+      <nav class="nav" id="nav" aria-label="Jump to a result section"></nav>
+    </section>
+
+    <div class="foot">
+      <p>Tags are split at the first comma, so <code>Rollett\, A</code> reads as “Rollett” and “A”. Escapes like <code>\,</code> count as the plain character.</p>
+      <p>◆ uses the “skip clearly different first names” setting.</p>
+    </div>
+  </aside>
+
+  <section class="panel" id="panel" aria-live="polite">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-mark"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 12h10M4 18h7"/><path d="m15 17 2.5 2.5L22 15"/></svg></div>
+      <h2 id="emptyTitle">Results appear here</h2>
+      <p id="emptyText">Choose a tagged-text export, pick your checks, and click Run checks. Nothing leaves your computer.</p>
+    </div>
+    <div id="resultsWrap" hidden>
+      <div class="panel-head">
+        <div class="panel-title"><h2>Results</h2><p id="resMeta"></p></div>
+        <input class="search" id="search" type="search" placeholder="Filter by name…" aria-label="Filter results by name">
+        <span class="toast" id="toast" role="status"></span>
+        <button class="btn btn-sm" id="exportTxt" type="button">Export log (.txt)</button>
+        <button class="btn btn-sm" id="exportCsv" type="button">Export spreadsheet (.csv)</button>
+      </div>
+      <div class="stale" id="stale" hidden>Checks changed since this run. <button class="btn btn-sm btn-red" type="button" id="rerunStale">Run again</button></div>
+      <div class="results" id="results"></div>
+    </div>
+  </section>
+</div>
+
+<script src="app.js?v=0.01"></script>
+</body>
+</html>
