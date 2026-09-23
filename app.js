@@ -1,5 +1,5 @@
-/* TMS Index Author Check v0.02 */
-var APP_VERSION = "0.02";
+/* TMS Index Author Check v0.03 */
+var APP_VERSION = "0.03";
 // CORE-START
 var IC = (function () {
   var PARTICLES = /^(van|von|der|den|de|del|della|di|da|dos|das|du|la|le|ter|ten|zu|af|al|el|bin|ibn|st)$/;
@@ -367,7 +367,7 @@ var IC = (function () {
   // Each sidebar step folds to a one-line summary
   state.col = { 1: false, 2: false, 3: false };
   function stepSummary(n) {
-    if (n === 1) return state.fileName || "No file yet";
+    if (n === 1) return state.data ? "Loaded" : "";
     if (n === 2) { var k = onCount(), total = allChecks().length; return (k === total ? "All " + total + " on" : k + " of " + total + " on") + (isDirty() ? " · changed" : ""); }
     if (n === 3 && state.res) { var r = JSON.parse(state.ran).on; return allChecks().filter(function (c) { return r[c.key]; }).length + " sections"; }
     return "";
@@ -378,6 +378,8 @@ var IC = (function () {
     $("step" + n).classList.toggle("is-collapsed", c);
     $("step" + n + "Toggle").setAttribute("aria-expanded", String(!c));
     $("step" + n + "Summary").textContent = c ? stepSummary(n) : "";
+    $("step" + n + "Summary").classList.toggle("ok", n === 1 && !!state.data);
+    if (n === 1) $("step1Toggle").title = state.fileName ? "Loaded: " + state.fileName : "";
   }
   function refreshSteps() {
     [1, 2, 3].forEach(function (n) { if (state.col[n]) $("step" + n + "Summary").textContent = stepSummary(n); });
@@ -456,7 +458,7 @@ var IC = (function () {
     $("dropSub").textContent = "Drop or choose another file to replace it";
     setFileStatus('<span class="badge b-green">✓ ' + fmt(data.markers) + ' markers</span><span class="badge b-neutral">' + fmt(data.entries.length) + " tags</span>");
     $("resultsWrap").hidden = true; $("emptyState").hidden = false;
-    renderNav(); setCollapsed(1, false); setCollapsed(2, false);
+    renderNav(); setCollapsed(1, true); setCollapsed(2, false);
     $("emptyTitle").textContent = "Ready to run";
     $("emptyText").textContent = "“" + name + "” is loaded. Pick your checks on the left, then click Run checks.";
     renderList();

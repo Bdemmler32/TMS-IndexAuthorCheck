@@ -2,7 +2,7 @@
    Bump VERSION on every deploy (and the ?v= numbers in index.html).
    HTML, CSS and JS always come from the network first, so users get the
    new version on the next load; the cache is only a fallback for offline use. */
-const VERSION = "0.02";
+const VERSION = "0.03";
 const CACHE = "tms-index-author-check-v" + VERSION;
 const ASSETS = ["./", "./index.html", "./styles.css?v=" + VERSION, "./app.js?v=" + VERSION, "./tms-logo.png"];
 

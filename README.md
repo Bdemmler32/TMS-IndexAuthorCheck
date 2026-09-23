@@ -1,4 +1,4 @@
-# TMS Index Author Check v0.02
+# TMS Index Author Check v0.03
 
 Checks the author index tags in an Adobe InDesign tagged-text export before the index is built. Everything runs in the browser, and files are never uploaded.
 
@@ -28,7 +28,7 @@ The service worker loads HTML, CSS and JS from the network first, so users get n
 
 For each release, change the version number in these places:
 
-- `sw.js`: `const VERSION = "0.02";`
-- `index.html`: `?v=0.02` on `styles.css` and `app.js`, and the `app-version` meta tag
-- `app.js`: `var APP_VERSION = "0.02";`
-- the `v0.02` label in the top bar in `index.html`
+- `sw.js`: `const VERSION = "0.03";`
+- `index.html`: `?v=0.03` on `styles.css` and `app.js`, and the `app-version` meta tag
+- `app.js`: `var APP_VERSION = "0.03";`
+- the `v0.03` label in the top bar in `index.html`
